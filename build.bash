@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
 if [ -d openwrt ]; then
-  git clone https://github.com/openwrt/openwrt.git -b v22.03.5 --recursive
-else
-  pushd openwrt
-  git pull
-  popd
+  rm -rf openwrt
 fi
 
+git clone https://github.com/openwrt/openwrt.git -b v22.03.5 --recursive
 pushd openwrt
 
 ./scripts/feeds update -a

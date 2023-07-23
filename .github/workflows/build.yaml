@@ -1,0 +1,31 @@
+on:
+  push:
+    branches: [master]
+
+name: Build
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
+        with:
+          extra-conf: |
+            accept-flake-config = true
+
+      - name: Build OpenWRT
+        run: |
+          cat build.bash | nix develop
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: targets
+          path: ./openwrt/bin/targets/x86/64
+          retention-days: 1

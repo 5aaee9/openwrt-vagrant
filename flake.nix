@@ -1,11 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    flake-utils = {
-      url = "github:numtide/flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs, flake-utils }: (flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ] (system:
@@ -29,6 +25,7 @@
         name = "openwrt-env";
         targetPkgs = pkgs: with pkgs; [
           git
+          bash
           perl
           gnumake
           gcc
@@ -54,6 +51,7 @@
           glibc.static
         ];
         multiPkgs = null;
+        runScript = "bash";
         extraOutputsToInstall = [ "dev" ];
         profile = ''
           export hardeningDisable=all
